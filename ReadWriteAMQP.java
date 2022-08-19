@@ -10,13 +10,14 @@ public class ReadWriteAMQP extends RouteBuilder {
       from("timer:java?period=1000")
         .routeId("send")
         .setBody()
-          .simple("Hello Camel K from ${routeId} at at ${date:now:dd-MM-yyyy HH:mm:ss}")
+          .simple("Hello Camel K from ${routeId} at ${date:now:dd-MM-yyyy HH:mm:ss}")
+        .log("${body}")
         .to("amqp:queue:phil-test");
 
       // Receive messages from AMQ Broker
       from("amqp:queue:phil-test")
         .routeId("Receive")
-        .log("Receieve Message: ${body}");
+      .log("Receieve Message: ${body}");
       }
 
 }

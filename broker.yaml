@@ -9,8 +9,8 @@ spec:
       name: amqp
       port: 5672
       protocols: amqp
-  adminPassword: <fill in>
-  adminUser: <fill in>
+  adminPassword: admin
+  adminUser: admin
   console:
     expose: true
   deploymentPlan:
