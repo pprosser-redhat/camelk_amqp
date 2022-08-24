@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: phils-broker
+  name: amqbroker-service-monitor
+spec:
+  endpoints:
+    - path: /metrics
+      port: console-jolokia
+  selector:
+    matchLabels:
+      ActiveMQArtemis: phils-broker

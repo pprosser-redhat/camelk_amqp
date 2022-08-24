@@ -1,0 +1,58 @@
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemis
+metadata:
+  name: phils-broker
+  application: demo
+spec:
+  version: 7.10.0
+  acceptors:
+    - name: amqp
+      port: 5672
+      protocols: amqp
+    - name: any
+      port: 61616
+      protocols: all
+  deploymentPlan:
+    labels:
+      name: phils-broker
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: name
+                  operator: In
+                  values:
+                    - phils-broker
+            topologyKey: kubernetes.io/hostname
+    storage:
+      size: 1Gi
+    image: placeholder
+    size: 2
+    requireLogin: true
+    persistenceEnabled: true
+    journalType: aio
+    messageMigration: true
+    jolokiaAgentEnabled: true
+    managementRBACEnabled: false
+    enableMetricsPlugin: true
+  addressSettings:
+    applyRule: merge_all
+    addressSetting:
+    - match: '#'
+      deadLetterAddress: DLQ
+    - match: 'abc#'
+      deadLetterAddress: DLQABC
+      defaultConsumerWindowSize: 2048000
+      maxSizeBytes: '10m'
+    - match: 'jms'
+      deadLetterAddress: jmsdlq
+  console:
+    expose: true
+    sslEnabled: false
+  upgrades:
+    enabled: true
+    minor: true
+  adminUser: admin
+  adminPassword: admin
+ 
